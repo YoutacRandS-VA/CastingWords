@@ -1,6 +1,17 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 const app = new Koa();
+
+const path = require('path');
+const render = require('koa-ejs');
+render(app, {
+  root: path.join(__dirname, 'view'),
+  layout: 'template',
+  viewExt: 'html',
+  cache: false,
+  debug: false
+});
+
 app.use(bodyParser());
 
 app.use(async (ctx, next) => {
