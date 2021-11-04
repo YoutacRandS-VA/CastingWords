@@ -6,7 +6,7 @@ const route = router({
 
 const fs = require('fs');
 const multer = require('@koa/multer');
-const upload = multer();
+const upload = multer({ dest: 'uploads/' });
 
 /**
  * async checkAuth
@@ -25,20 +25,48 @@ route.get('/', async (ctx) => {
   }
 });
 
-// add a route for uploading multiple files
+route.get('/list', async (ctx) => {
+  try {
+    const files = fs.readdirSync('uploads').filter(_=>_!='.DS_Store');
+    const filesArray = [];
+    for(let i=0;i<files.length;i++) {
+      let file = files[i];
+      let fileStat = fs.statSync(`uploads/${file}`);
+      var fileSizeInMegabytes =  (fileStat.size / (1024*1024)).toFixed(1);
+      let fileSize = `${fileSizeInMegabytes} MB`;
+      if(fileSizeInMegabytes>1000) {
+        let gb = (fileSizeInMegabytes/1024).toFixed(1);
+        fileSize = `${gb} GB`; 
+      }
+      filesArray.push({
+        'name': file,
+        'size': fileSize,
+        'create_date': fileStat.birthtime
+      });
+    }
+    await ctx.render('list', {'fileList': filesArray});
+  } catch (e) {
+    ctx.body =  {'result':'fail', 'message': e.name};
+    ctx.status = 404;
+  }
+});
+
 route.post(
   '/api/upload',
   upload.fields([
     {
       name: 'multipleFiles',
-      maxCount: 10
+      maxCount: 1
     }
   ]),
   ctx => {
-    console.log('ctx.request.files', ctx.request.files);
-    console.log('ctx.files', ctx.files);
-    console.log('ctx.request.body', ctx.request.body);
-    ctx.body = 'done';
+    console.log(ctx.request);
+    let files = ctx.files.multipleFiles;
+    for(let i=0;i<files.length;i++){
+      let file = files[i];
+      fs.renameSync(`uploads/${file.filename}`, `uploads/${file.originalname}`)
+    }
+    ctx.redirect('/list');
   }
 );
 

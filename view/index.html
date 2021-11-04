@@ -1,5 +1,22 @@
-    <form action="/api/upload" enctype="multipart/form-data" method="post">
-      <div>Text field title: <input type="text" name="title" /></div>
-      <div>File: <input type="file" name="multipleFiles" multiple="multiple" /></div>
-      <input type="submit" value="Upload" />
-    </form>
+<div class="container-fluid">
+  <form
+    class="row g-3"
+    action="/api/upload"
+    enctype="multipart/form-data"
+    method="post"
+  >
+    <div class="col-auto">
+      <div>
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" placeholder="title">
+      </div>
+      <div>
+        File: <input class="form-control"  type="file" name="multipleFiles"/>
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary mb-3">Upload</button>
+      </div>
+    </div>
+  </form>
+  
+  </div>
