@@ -55,18 +55,20 @@ route.post(
   '/api/upload',
   upload.fields([
     {
-      name: 'multipleFiles',
+      name: 'file',
       maxCount: 1
     }
   ]),
   ctx => {
-    console.log(ctx.request);
-    let files = ctx.files.multipleFiles;
+    let body = ctx.request.body;
+    let files = ctx.files.file;
     for(let i=0;i<files.length;i++){
       let file = files[i];
       fs.renameSync(`uploads/${file.filename}`, `uploads/${file.originalname}`)
     }
-    ctx.redirect('/list');
+    ctx.body = {
+      'message': 'Upload success.'
+    }
   }
 );
 

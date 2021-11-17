@@ -5,6 +5,10 @@
   "repository": "git@github.com:peterlee0127/CastingWords.git",
   "author": "peterlee <peterlee0127@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "server": "node server.js",
+    "dev": "nodemon server.js"
+  },
   "dependencies": {
     "@koa/multer": "^3.0.0",
     "googleapis": "^39.2.0",
