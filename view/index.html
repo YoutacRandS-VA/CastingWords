@@ -21,7 +21,7 @@
               </div>
               <div class="mb-3">
                 <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" rows="2"></textarea>
+                <textarea class="form-control" id="notes" rows="2" placeholder="notes"></textarea>
               </div>
             <div class="custom-file">
               <input type="file" class="custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
@@ -102,6 +102,7 @@
           field += 'notes ';
         }
         show_alert(`${field} is null`, "warning");
+        alert(`${field} is null`);
         return;
       }
 

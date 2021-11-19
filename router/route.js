@@ -3,6 +3,8 @@ const route = router({
   method: ['GET', 'POST'],
   validate: { type: 'json' },
 });
+const db = require('../model/db.js');
+const utils = require('../utils/utils.js');
 
 const fs = require('fs');
 const multer = require('@koa/multer');
@@ -25,25 +27,24 @@ route.get('/', async (ctx) => {
   }
 });
 
+
+
+
 route.get('/list', async (ctx) => {
   try {
-    const files = fs.readdirSync('uploads').filter(_=>_!='.DS_Store');
-    const filesArray = [];
-    for(let i=0;i<files.length;i++) {
-      let file = files[i];
-      let fileStat = fs.statSync(`uploads/${file}`);
-      var fileSizeInMegabytes =  (fileStat.size / (1024*1024)).toFixed(1);
-      let fileSize = `${fileSizeInMegabytes} MB`;
-      if(fileSizeInMegabytes>1000) {
-        let gb = (fileSizeInMegabytes/1024).toFixed(1);
-        fileSize = `${gb} GB`; 
+
+    let filesArray = await(await db.FILE.find({})).map(_=>{ 
+      return {
+        title: _.title,
+        speaker: _.speaker,
+        notes: _.notes,
+        status: _.status,
+        file_name: _.file_name,
+        file_size: `${_.file_size}MB`,
+        file_upload_date: _.file_upload_date,
       }
-      filesArray.push({
-        'name': file,
-        'size': fileSize,
-        'create_date': fileStat.birthtime
-      });
-    }
+    });
+
     await ctx.render('list', {'fileList': filesArray});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
@@ -59,12 +60,24 @@ route.post(
       maxCount: 1
     }
   ]),
-  ctx => {
+  async ctx => {
     let body = ctx.request.body;
     let files = ctx.files.file;
     for(let i=0;i<files.length;i++){
       let file = files[i];
-      fs.renameSync(`uploads/${file.filename}`, `uploads/${file.originalname}`)
+      let originalname = file.originalname;
+      fs.renameSync(`uploads/${file.filename}`, `uploads/${body.title}`);
+      let size = utils.getFileSize(file.originalname);
+      const FILE = new db.FILE({
+        title: body.title,
+        speaker: body.speaker,
+        notes: body.notes,
+        status: 'upload',
+        file_name: body.title,
+        file_size: size,
+        file_upload_date: new Date()
+      })
+      await FILE.save();
     }
     ctx.body = {
       'message': 'Upload success.'
