@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  mongo:
+    image: mongo:4.0
+    volumes:
+    - ./data/db:/data/db
+    command: mongod
+    ports:
+    - "27017:27017"
