@@ -28,24 +28,27 @@ route.get('/', async (ctx) => {
 });
 
 
+function mapper(_) {
+  let mapper = {
+    title: _.title,
+    speaker: _.speaker,
+    notes: _.notes,
+    status: _.status,
+    file_name: _.file_name,
+    file_size: `${_.file_size}MB`,
+    file_upload_date: _.file_upload_date,
+  };
+  return mapper
+}
 
 
 route.get('/list', async (ctx) => {
   try {
+ 
+    let filesArray = await(await db.FILE.find({})).map(_=>{ return mapper(_)  });
+    let keys = Object.keys(mapper(Object));
 
-    let filesArray = await(await db.FILE.find({})).map(_=>{ 
-      return {
-        title: _.title,
-        speaker: _.speaker,
-        notes: _.notes,
-        status: _.status,
-        file_name: _.file_name,
-        file_size: `${_.file_size}MB`,
-        file_upload_date: _.file_upload_date,
-      }
-    });
-
-    await ctx.render('list', {'fileList': filesArray});
+    await ctx.render('list', {'fileList': filesArray, 'keys': keys});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
     ctx.status = 404;
@@ -67,7 +70,7 @@ route.post(
       let file = files[i];
       let originalname = file.originalname;
       fs.renameSync(`uploads/${file.filename}`, `uploads/${body.title}`);
-      let size = utils.getFileSize(file.originalname);
+      let size = utils.getFileSize(body.title);
       const FILE = new db.FILE({
         title: body.title,
         speaker: body.speaker,
