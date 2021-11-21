@@ -29,7 +29,7 @@ route.get('/', async (ctx) => {
 
 
 function mapper(_) {
-  let mapper = {
+  return {
     title: _.title,
     speaker: _.speaker,
     notes: _.notes,
@@ -38,7 +38,6 @@ function mapper(_) {
     file_size: `${_.file_size}MB`,
     file_upload_date: _.file_upload_date,
   };
-  return mapper
 }
 
 

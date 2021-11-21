@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/castingwords');
+mongoose.connect('mongodb://mongo-service:27017/castingwords');
 
 const FILE = mongoose.model('File', { 
     title: String,
