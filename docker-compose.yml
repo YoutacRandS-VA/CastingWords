@@ -2,6 +2,7 @@ version: '2'
 
 services:
   castingwords:
+    pull_policy: always
     image: castingwords
     volumes:
     - ./uploads:/usr/src/app/uploads
