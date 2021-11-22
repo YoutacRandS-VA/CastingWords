@@ -1,7 +1,8 @@
-**/.git
-**/node_modules
-**/data
-**/token.json
+.git
+node_modules
+data
+uploads
+token.json
 credentials.json
 yarn.lock
 package-lock.json
