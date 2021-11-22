@@ -169,7 +169,7 @@
 
         // Update the progress text and progress bar
         progress.setAttribute("style", `width: ${Math.floor(percent_complete)}%`);
-        progress_status.innerText = `${Math.floor(percent_complete)}% uploaded`;
+        progress_status.innerText = `${Math.floor(percent_complete)}% uploaded, ${Number(loaded/1024/1024).toFixed(0)}/${Number(total/1024/1024).toFixed(0)}MB`;
 
       })
 
