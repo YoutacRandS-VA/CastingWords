@@ -2,10 +2,11 @@ version: '2'
 
 services:
   castingwords:
-    pull_policy: always
     image: castingwords
     volumes:
     - ./uploads:/usr/src/app/uploads
+    - "/etc/timezone:/etc/timezone:ro"
+    - "/etc/localtime:/etc/localtime:ro"
     working_dir: /usr/src/app
     command: node server.js
     ports:
