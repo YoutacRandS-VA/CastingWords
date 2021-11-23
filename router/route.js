@@ -44,7 +44,7 @@ function mapper(_) {
 route.get('/list', async (ctx) => {
   try {
  
-    let filesArray = await(await db.FILE.find({})).map(_=>{ return mapper(_)  });
+    let filesArray = await(await db.FILE.find({})).map(_=>{ return mapper(_)  }).reverse();
     let keys = Object.keys(mapper(Object));
 
     await ctx.render('list', {'fileList': filesArray, 'keys': keys});
@@ -69,7 +69,7 @@ route.post(
       let file = files[i];
       let originalFileName = file.originalname;
       let uuid = uuidv4().split("-").pop();
-      let newFileName = `${body.title}_${uuid}_${originalFileName}`;
+      let newFileName = `${body.title}__${uuid}__${originalFileName}`;
       fs.renameSync(`uploads/${file.filename}`, `uploads/${newFileName}`);
       let size = utils.getFileSize(newFileName);
       const FILE = new db.FILE({
