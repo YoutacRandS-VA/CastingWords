@@ -11,6 +11,7 @@ const multer = require('@koa/multer');
 const upload = multer({ dest: 'uploads/' });
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
+
 /**
  * async checkAuth
  */
@@ -28,39 +29,43 @@ route.get('/', async (ctx) => {
   }
 });
 
-
-function mapper(_) {
-  return {
-    title: _.title,
-    speaker: _.speaker,
-    notes: _.notes,
-    status: _.status,
-    file_name: _.file_name,
-    file_size: `${_.file_size}MB`,
-    file_upload_date: moment(_.file_upload_date).locale('zh_TW').format('LLLL'),
-  };
-}
-
 route.get('/list', async (ctx) => {
   try {
- 
-    let filesArray = await(await db.FILE.find({})).map(_=>{ return mapper(_)  }).reverse();
-    let keys = Object.keys(mapper(Object));
-
+    let filesArray = await(await db.FILE.find({})).map(_=>{ return utils.mapper(_)  }).reverse();
+    let keys = Object.keys(utils.mapper(Object));
     await ctx.render('list', {'fileList': filesArray, 'keys': keys});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
     ctx.status = 404;
+    console.error(e);
+  }
+});
+
+route.post('/api/submit', async ctx => {
+  let file_name = ctx.request.body.file_name;
+  let result = await db.FILE.findOne({"file_name": file_name});
+  if(result.status!="uploaded") {
+    result.status = "uploaded";
+  }else {
+    result.status = "unprocessed";
+  }
+  await result.save();
+
+  if(file_name && result) {
+    ctx.body = {
+      "message": "ok"
+    };
+  }else {
+    ctx.body = {
+      "message": "fail"
+    };
   }
 });
 
 route.post(
   '/api/upload',
   upload.fields([
-    {
-      name: 'file',
-      maxCount: 1
-    }
+    { name: 'file', maxCount: 1 }
   ]),
   async ctx => {
     let body = ctx.request.body;
@@ -76,7 +81,7 @@ route.post(
         title: body.title,
         speaker: body.speaker,
         notes: body.notes,
-        status: 'upload',
+        status: 'unprocessed',
         file_name: newFileName,
         file_size: size,
         file_upload_date: new Date()

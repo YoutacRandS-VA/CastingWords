@@ -1,4 +1,5 @@
 const fs = require('fs');
+const moment = require("moment");
 
 function getFileSize(file_name) {
     let fileStat = fs.statSync(`uploads/${file_name}`);
@@ -6,6 +7,18 @@ function getFileSize(file_name) {
     return fileSizeInMegabytes;
 }
 
+function mapper(_) {
+    return {
+        title: _.title,
+        speaker: _.speaker,
+        notes: _.notes,
+        status: _.status,
+        file_name: _.file_name,
+        file_size: `${_.file_size}MB`,
+        file_upload_date: moment(_.file_upload_date).locale('zh_TW').format('LLLL'),
+    };
+}
+
 module.exports = {
-    getFileSize
+    getFileSize, mapper
 };

@@ -5,22 +5,44 @@
             <% for(var i=0; i<keys.length; i++) {%>
                 <th><%= keys[i] %></th>
             <% } %>
-            <th>Download/Edit</th>
+            <th>Edit</th>
         </thead>
             <% for(var i=0; i<fileList.length; i++) {%>
         <tbody>
                 <% var keys = Object.keys(fileList[i]); %>
+                <% var file_name = fileList[i]["file_name"]; %>
+                <tr id='<%= file_name %>'>
                 <% for(var j=0; j<keys.length; j++) {%>
-                    <td><%= fileList[i][keys[j]] %></td> 
+                    <td>
+                    <% if(keys[j] == "file_name") { %>
+                        <a target="_blank" href='/uploads/<%= file_name %>'>
+                            <%= fileList[i][keys[j]] %>
+                        </a>
+                    <% }else{ %>
+                        <%= fileList[i][keys[j]] %>
+                    <% } %>
+                    </td>
                 <% } %>
                 <td>
-                    <a target="_blank" href='/uploads/<%= fileList[i]["file_name"] %>'>Download</a>
-                    <br>
-                    <button type="button" class="btn btn-primary btn-sm">Edit</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="submit('<%= file_name %>')">Submit</button>
                 </td>
+                </tr>
             <% } %>
          
         </tbody>
     </table>
     </div>
 </div>
+
+<script>
+    function submit(file_name) {
+        axios.post('/api/submit', {
+            file_name: file_name
+        })
+            .then(function (response) {
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+</script>
