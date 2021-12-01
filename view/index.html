@@ -1,5 +1,3 @@
-<body>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <div class="container">
     <div class="row">
       <div class="col">
@@ -21,9 +19,8 @@
                 <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
                 <textarea class="form-control" id="notes" rows="2" placeholder="notes"></textarea>
               </div>
-            <div class="custom-file">
-              <input type="file" class="custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
-              <label id="file_input_label" class="custom-file-label" for="image">Select file</label>
+            <div class="input-group custom-file">
+              <input type="file" class="form-control custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
             </div>
           </div>
 
@@ -65,16 +62,12 @@
     var alert_wrapper = document.getElementById("alert_wrapper");
     // Get a reference to the file input element & input label
     var input = document.getElementById("file_input");
-    var file_input_label = document.getElementById("file_input_label");
 
     // Function to show alerts
     function show_alert(message, alert) {
       alert_wrapper.innerHTML = `
         <div id="alert" class="alert alert-${alert} alert-dismissible fade show" role="alert">
           <span>${message}</span>
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
       `
     }
@@ -183,10 +176,6 @@
 
     }
 
-    // Function to update the input placeholder
-    function input_filename() {
-      file_input_label.innerText = input.files[0].name;
-    }
 
     // Function to reset the page
     function reset() {
@@ -204,11 +193,6 @@
       progress_wrapper.classList.add("d-none");
       // Reset the progress bar state
       progress.setAttribute("style", `width: 0%`);
-      // Reset the input placeholder
-      file_input_label.innerText = "Select file";
     }
 
   </script>
-
-
-</body>
