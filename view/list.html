@@ -12,6 +12,7 @@
         <tbody>
                 <% var keys = Object.keys(fileList[i]); %>
                 <% var file_name = fileList[i]["file_name"]; %>
+                <% var display_button = fileList[i]["status"]; %>
                 <tr id='<%= file_name %>'>
                 <% for(var j=0; j<keys.length; j++) {%>
                     <td>
@@ -24,8 +25,12 @@
                     <% } %>
                     </td>
                 <% } %>
-                <td>
-                    <button type="button" class="btn btn-primary btn-sm" onclick="submit('<%= file_name %>')">Submit</button>
+                <td>  
+                    <% if(display_button != "submitted") { %>
+                        <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button>
+                    <% }else{ %>
+                        <!-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button> -->
+                    <% } %>
                 </td>
                 </tr>
             <% } %>
@@ -34,15 +39,50 @@
     </table>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Do you want to submit this file to castingWords service ?</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          This action can't be undo.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button id="submit" type="button" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+unprocessed/processing/done
 
 <script>
-    function submit(file_name) {
+    var modalElement = document.getElementById('staticBackdrop');
+    var modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
+    var file_name = "";
+    modalElement.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var recipient = button.getAttribute('data-bs-whatever')
+        var modalTitle = modalElement.querySelector('.modal-title')
+        var modalBodyInput = modalElement.querySelector('.modal-body input')
+        file_name = recipient;
+    })
+    modalElement.addEventListener("click", function() {
+        if(file_name==""){
+            return;
+        }
         axios.post('/api/submit', {
             file_name: file_name
         }).then(function (response) {
+            modalInstance.hide();
             location.reload();
         }).catch(function (error) {
             console.log(error);
+            location.reload();
         });
-    }
+    });
 </script>

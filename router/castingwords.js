@@ -2,6 +2,7 @@ const axios = require("axios");
 const api_key = require("./../config.json").api_key;
 
 async function submit(payload){
+    return new Promise( (resolve, reject) => {
     //   curl --data \
     //   '{"api_key":[CW_API_KEY],
     //     "url":[AUDIO_FILE_URL],
@@ -10,28 +11,34 @@ async function submit(payload){
     //         "notes":[SOME_NOTES],
     //         "tags":"Interview"
     //    }' \
-    // https://castingwords.com/store/API4/order_url \
-    // -H "Content-Type: application/json"
+
     const api = "https://castingwords.com/store/API4/order_url";
     let body = {
         "test": 1,
         "api_key": api_key,
         "url": payload.url,
         "title": payload.title,
-        "names": payload.names,
+        "names": payload.speaker,
         "notes": payload.notes,
         "tags": payload.tags
     }
     axios.post(api, body)
         .then( (response) => {
-            console.log(response);
+            console.log(response.data);
+            resolve(response.data);
         })
         .catch( (error) => {
-            console.log(error)
+            console.log(error);
+            reject(error);
         });
+    });
 }
 
 async function listJobs() {
     // curl https://castingwords.com/store/API4/audiofile/[AUDIO_FILE_ID]?api_key=[CW_API_KEY] \
     //     -H "Content-Type: application/json"
+}
+
+module.exports = {
+    submit
 }

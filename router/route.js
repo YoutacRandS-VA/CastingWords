@@ -5,6 +5,7 @@ const route = router({
 });
 const db = require('../model/db.js');
 const utils = require('../utils/utils.js');
+const castingwords = require('./castingwords.js');
 
 const fs = require('fs');
 const multer = require('@koa/multer');
@@ -44,10 +45,18 @@ route.get('/list', async (ctx) => {
 route.post('/api/submit', async ctx => {
   let file_name = ctx.request.body.file_name;
   let result = await db.FILE.findOne({"file_name": file_name});
-  if(result.status!="uploaded") {
-    result.status = "uploaded";
-  }else {
-    result.status = "unprocessed";
+  if(result.status!="submitted" && result.order == undefined) {
+    result.status = "submitted";
+    let order = await castingwords.submit({
+      "url": "https://castingwords.peterlee.app/uploads/2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)__4ab160de3774__2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)_Audrey%20Tang,Emil%20Elo.mp4",
+      "title": result.title,
+      "speaker": result.speaker,
+      "notes": result.notes,
+      "tags": result.tags
+    });
+    result.order_id = order.order;
+    result.order_audiofiles = order.audiofiles;
+    result.order_message = order.message;
   }
   await result.save();
 
@@ -89,7 +98,7 @@ route.post(
       await FILE.save();
     }
     ctx.body = {
-      'message': 'Upload success.'
+      'message': `Upload success.\t\ttitle: ${body.title}`
     }
   }
 );

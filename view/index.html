@@ -72,6 +72,7 @@
       `
     }
 
+
     // Function to upload file
     function upload() {
       let title = document.querySelector("#title").value;
@@ -193,6 +194,10 @@
       progress_wrapper.classList.add("d-none");
       // Reset the progress bar state
       progress.setAttribute("style", `width: 0%`);
+
+      document.querySelector("#title").value = "";
+      document.querySelector("#speaker").value = "";
+      document.querySelector("#notes").value = "";
     }
 
   </script>

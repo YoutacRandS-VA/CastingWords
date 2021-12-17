@@ -8,7 +8,10 @@ const FILE = mongoose.model('File', {
     status: String,
     file_name: String,
     file_size: Number,
-    file_upload_date: Date
+    file_upload_date: Date,
+    order_id: String,
+    order_audiofiles: [Number],
+    order_message: String
 });
 
 
