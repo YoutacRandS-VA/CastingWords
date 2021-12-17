@@ -9,6 +9,8 @@ services:
     - "/etc/localtime:/etc/localtime:ro"
     working_dir: /usr/src/app
     command: node server.js
+    environment: 
+      NODE_ENV: production
     ports:
     - "3000:3000"
   mongo-service:
