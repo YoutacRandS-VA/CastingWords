@@ -52,7 +52,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button id="submit" type="button" class="btn btn-primary">Submit</button>
+          <button id="submitButton" type="button" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
@@ -71,7 +71,7 @@ unprocessed/processing/done
         var modalBodyInput = modalElement.querySelector('.modal-body input')
         file_name = recipient;
     })
-    modalElement.addEventListener("click", function() {
+    document.getElementById('submitButton').addEventListener("click", function() {
         if(file_name==""){
             return;
         }

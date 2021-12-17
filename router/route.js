@@ -45,7 +45,7 @@ route.get('/list', async (ctx) => {
 route.post('/api/submit', async ctx => {
   let file_name = ctx.request.body.file_name;
   let result = await db.FILE.findOne({"file_name": file_name});
-  if(result.status!="submitted" && result.order == undefined) {
+  if(result.status!="submitted" && result.order_id == undefined) {
     result.status = "submitted";
     let order = await castingwords.submit({
       "url": "https://castingwords.peterlee.app/uploads/2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)__4ab160de3774__2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)_Audrey%20Tang,Emil%20Elo.mp4",
