@@ -22,6 +22,7 @@ async function submit(payload){
         "notes": payload.notes,
         "tags": payload.tags
     }
+    console.log(body);
     axios.post(api, body)
         .then( (response) => {
             console.log(response.data);
