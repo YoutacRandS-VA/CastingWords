@@ -19,6 +19,14 @@
                 <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
                 <textarea class="form-control" id="notes" rows="2" placeholder="notes"></textarea>
               </div>
+              <div class="mb-3">
+                <label class="form-label">Transcription speed level</label><br>
+                <select class="form-select" id="speed_level" aria-label="">
+                  <option value="TRANS14" selected>Budget Transcription (1$/min)</option>
+                  <option value="TRANS6">1 Week Transcription (1.5$/min)</option>
+                  <option value="TRANS2">1 Day Transcription (2.5$/min)</option>
+                </select>
+              </div>
             <div class="input-group custom-file">
               <input type="file" class="form-control custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
             </div>
@@ -78,6 +86,7 @@
       let title = document.querySelector("#title").value;
       let speaker = document.querySelector("#speaker").value;
       let notes = document.querySelector("#notes").value;
+      let speed_level = document.querySelector("#speed_level").value;
 
       if(!title || !speaker) {
         let field = '';
@@ -130,6 +139,7 @@
       data.append("title", title);
       data.append("speaker", speaker);
       data.append("notes", notes);
+      data.append("speed_level", speed_level);
 
       // request progress handler
       request.upload.addEventListener("progress", function (e) {

@@ -13,15 +13,10 @@ async function submit(payload){
     //    }' \
 
     const api = "https://castingwords.com/store/API4/order_url";
-    let body = {
-        "test": 1,
-        "api_key": api_key,
-        "url": payload.url,
-        "title": payload.title,
-        "names": payload.speaker,
-        "notes": payload.notes,
-        "tags": payload.tags
-    }
+    let body = payload;
+    body.test = 1;
+    body.api_key = api_key;
+    body.tags = "Interview";
     console.log(body);
     axios.post(api, body)
         .then( (response) => {
@@ -29,8 +24,8 @@ async function submit(payload){
             resolve(response.data);
         })
         .catch( (error) => {
-            console.log(error);
-            reject(error);
+            console.log(error.response.data);
+            reject(error.response.data);
         });
     });
 }

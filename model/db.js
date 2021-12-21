@@ -1,5 +1,9 @@
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://mongo-service:27017/castingwords');
+let mongodbURI = "mongodb://mongo-service:27017/castingwords"
+if(process.env.NODE_ENV!="production") {
+    mongodbURI = "mongodb://localhost:27017/castingwords";
+}
+mongoose.connect(mongodbURI);
 
 const FILE = mongoose.model('File', { 
     title: String,
@@ -9,6 +13,7 @@ const FILE = mongoose.model('File', {
     file_name: String,
     file_size: Number,
     file_upload_date: Date,
+    speed_level: String,
     order_id: String,
     order_audiofiles: [Number],
     order_message: String

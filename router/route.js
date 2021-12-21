@@ -43,6 +43,7 @@ route.get('/list', async (ctx) => {
 });
 
 route.post('/api/submit', async ctx => {
+  try{
   let file_name = ctx.request.body.file_name;
   let result = await db.FILE.findOne({"file_name": file_name});
   if(result.status!="submitted" && result.order_id == undefined) {
@@ -54,9 +55,9 @@ route.post('/api/submit', async ctx => {
     let order = await castingwords.submit({
       "url": `https://castingwords.peterlee.app/uploads/${file_path}`,
       "title": result.title,
-      "speaker": result.speaker,
+      "speaker": result.speaker.split(","),
       "notes": result.notes,
-      "tags": result.tags
+      "sku": result.speed_level
     });
     result.order_id = order.order;
     result.order_audiofiles = order.audiofiles;
@@ -71,6 +72,11 @@ route.post('/api/submit', async ctx => {
   }else {
     ctx.body = {
       "message": "fail"
+    };
+  }
+  }catch(e) {
+    ctx.body = {
+      "message": e
     };
   }
 });
@@ -94,6 +100,7 @@ route.post(
         title: body.title,
         speaker: body.speaker,
         notes: body.notes,
+        speed_level: body.speed_level,
         status: 'unprocessed',
         file_name: newFileName,
         file_size: size,
@@ -102,7 +109,7 @@ route.post(
       await FILE.save();
     }
     ctx.body = {
-      'message': `Upload success.\t\ttitle: ${body.title}`
+      'message': `Upload success.\ttitle: ${body.title}`
     }
   }
 );
