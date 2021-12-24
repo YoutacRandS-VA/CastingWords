@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 let mongodbURI = "mongodb://mongo-service:27017/castingwords"
-if(process.env.NODE_ENV!="production") {
+if(!process.env.IN_DOCKER) {
     mongodbURI = "mongodb://localhost:27017/castingwords";
 }
 mongoose.connect(mongodbURI);
