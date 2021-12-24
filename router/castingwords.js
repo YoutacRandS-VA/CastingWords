@@ -11,8 +11,6 @@ async function submit(payload){
     //         "notes":[SOME_NOTES],
     //         "tags":"Interview"
     //    }' \
-  
-
     const api = "https://castingwords.com/store/API4/order_url";
     let body = payload;
     body.api_key = api_key;

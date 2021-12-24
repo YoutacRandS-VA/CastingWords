@@ -20,7 +20,8 @@ const { v4: uuidv4 } = require('uuid');
 //   ctx.auth = await auth.checkAuth(ctx);
 //   await next();
 // });
-const environment = process.env.NODE_ENV!="production"? "develement":"production";
+
+const environment = process.env.NODE_ENV!="production"? "development":"production";
 
 route.get('/', async (ctx) => {
   try {
