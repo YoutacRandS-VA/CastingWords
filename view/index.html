@@ -8,38 +8,41 @@
 
           <div class="form-group mb-3">
               <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Title <font style="color:red">(*)</font></label>
-                <input type="email" class="form-control" id="title" placeholder="sample: 2021-11-02 interviewer">
+                <label for="exampleFormControlInput1" class="form-label">Title 標題<font style="color:red">(*)</font></label>
+                <input type="email" class="form-control" id="title" placeholder="sample: 2021-01-27 Conversation with Richard Danzig">
               </div>
               <div class="mb-3">
-                <label for="exampleFormControlInput1" class="form-label">Speakers <font style="color:red">(*)</font></label>
-                <input type="email" class="form-control" id="speaker" placeholder="sample: A,B,C">
+                <label for="exampleFormControlInput1" class="form-label">Speakers 發言順序<font style="color:red">(*)</font></label>
+                <input type="email" class="form-control" id="speaker" placeholder="sample: Audrey Tang, Richard Danzig">
               </div>
               <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
-                <textarea class="form-control" id="notes" rows="2" placeholder="sample: notes for interview"></textarea>
+                <label for="exampleFormControlTextarea1" class="form-label">Notes 備註</label>
+                <textarea class="form-control" id="notes" rows="2" placeholder="sample: Only Audrey`s voice is recorded. Maybe you can comment (interviewer speaks) when Richard speaks, thank you."></textarea>
               </div>
               <div class="mb-3">
-                <label class="form-label">Transcription speed level</label><br>
+                <label class="form-label">Transcription level 付費方案 <font style="color:red">(*)</font></label><br>
                 <select class="form-select" id="speed_level" aria-label="">
                   <option value="TRANS14" selected>Budget Transcription (1$/min)</option>
                   <option value="TRANS6">1 Week Transcription (1.5$/min)</option>
                   <option value="TRANS2">1 Day Transcription (2.5$/min)</option>
                 </select>
               </div>
-            <div class="input-group custom-file">
-              <input type="file" class="form-control custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
+              <div class="mb-3">              
+                <label class="form-label">Choose File 選擇本機檔案 <font style="color:red">(*)</font></label>
+                <div class="input-group custom-file">
+                <input type="file" class="form-control custom-file-input" name="file_input" id="file_input" oninput="input_filename();">
+              </div>
             </div>
           </div>
 
-          <button onclick="upload();" id="upload_btn" class="btn btn-primary">Upload</button>
+          <button onclick="upload();" id="upload_btn" class="btn btn-primary">Upload 上傳檔案</button>
 
           <button class="btn btn-primary d-none" id="loading_btn" type="button" disabled>
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            Uploading...
+            Uploading... 上傳中...
           </button>
 
-          <button type="button" id="cancel_btn" class="btn btn-secondary d-none">Cancel upload</button>
+          <button type="button" id="cancel_btn" class="btn btn-secondary d-none">Cancel upload 取消上傳</button>
 
         </div>
 
