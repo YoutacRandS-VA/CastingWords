@@ -27,7 +27,9 @@
         <div class="container">
             <span class="text-muted">
                 <% if(listPage) { %>
-                    <p>status狀態: uploaded(檔案上傳) -> submitted (已送出到castingwords)</p>
+                    <p>status狀態: uploaded(檔案上傳) -> submitted (已送出到CastingWords)</p>
+                <% }else{ %>
+                    <p><font style="color:red">(*)</font>: required field 必填欄位</p> 
                 <% } %>
                 <p>env: <%= environment %> </p>
             </span>
