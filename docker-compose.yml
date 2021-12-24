@@ -10,7 +10,7 @@ services:
     working_dir: /usr/src/app
     command: node server.js
     environment: 
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV}
     ports:
     - "3000:3000"
   mongo-service:

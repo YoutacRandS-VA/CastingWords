@@ -20,21 +20,23 @@ const { v4: uuidv4 } = require('uuid');
 //   ctx.auth = await auth.checkAuth(ctx);
 //   await next();
 // });
+const environment = process.env.NODE_ENV!="production"? "develement":"production";
 
 route.get('/', async (ctx) => {
   try {
-    await ctx.render('index');
+    await ctx.render('index', {'environment': environment, 'listPage': false});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
     ctx.status = e.status;
   }
 });
 
+
 route.get('/list', async (ctx) => {
   try {
     let filesArray = await(await db.FILE.find({})).map(_=>{ return utils.mapper(_)  }).reverse();
     let keys = Object.keys(utils.mapper(Object));
-    await ctx.render('list', {'fileList': filesArray, 'keys': keys});
+    await ctx.render('list', {'fileList': filesArray, 'keys': keys, 'environment': environment, 'listPage': true});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
     ctx.status = 404;
@@ -49,9 +51,6 @@ route.post('/api/submit', async ctx => {
   if(result.status!="submitted" && result.order_id == undefined) {
     result.status = "submitted";
     let file_path = encodeURI(file_name);
-    if(process.env.NODE_ENV!="production") {
-      file_path = "2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)__4ab160de3774__2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)_Audrey%20Tang,Emil%20Elo.mp4";
-    }
     let order = await castingwords.submit({
       "url": `https://castingwords.peterlee.app/uploads/${file_path}`,
       "title": result.title,

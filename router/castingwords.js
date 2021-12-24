@@ -11,12 +11,16 @@ async function submit(payload){
     //         "notes":[SOME_NOTES],
     //         "tags":"Interview"
     //    }' \
+  
 
     const api = "https://castingwords.com/store/API4/order_url";
     let body = payload;
-    body.test = 1;
     body.api_key = api_key;
     body.tags = "Interview";
+    if(process.env.NODE_ENV!="production") {
+        file_path = "https://castingwords.peterlee.app/uploads/2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)__4ab160de3774__2021-10-27%20Interview%20with%20Emil%20Elo(2328-2912)_Audrey%20Tang,Emil%20Elo.mp4";
+        body.test = 1;
+    }
     console.log(body);
     axios.post(api, body)
         .then( (response) => {

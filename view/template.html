@@ -23,7 +23,15 @@
 </nav>
 <body>
     <%- body %>
+    <footer class="footer" style="bottom:0;position: absolute;">
+        <div class="container">
+            <span class="text-muted">
+                <% if(listPage) { %>
+                    <p>status狀態: uploaded(檔案上傳) -> submitted (已送出到castingwords)</p>
+                <% } %>
+                <p>env: <%= environment %> </p>
+            </span>
+        </div>
+    </footer>
 </body>
-<footer>
-</footer>
 </html>
