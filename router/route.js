@@ -53,7 +53,7 @@ route.post('/api/submit', async ctx => {
     result.status = "submitted";
     let file_path = encodeURI(file_name);
     let order = await castingwords.submit({
-      "url": `https://castingwords.peterlee.app/uploads/${file_path}`,
+      "url": `https://castingwords.pdis.dev/uploads/${file_path}`,
       "title": result.title,
       "names": result.speaker.split(","),
       "notes": result.notes,
