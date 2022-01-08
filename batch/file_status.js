@@ -27,6 +27,7 @@ async function load_file_status() {
         let info = await get_file_status(order_audiofile);
         if(info.statename) {
             file.status = info.statename;
+            file.order_duration = info.duration;
             await file.save(); 
         }
     }
