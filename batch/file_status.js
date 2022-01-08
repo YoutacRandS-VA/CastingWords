@@ -6,15 +6,15 @@ const axios = require("axios");
 async function get_file_status(order_audiofiles) {
     return new Promise( (resolve, reject) => {
     const api = `https://castingwords.com/store/API4/audiofile/${order_audiofiles}?api_key=${api_key}`;
-        axios.get(api)
-            .then( (response) => {
-                console.log(response.data);
-                resolve(response.data.audiofile);
-            })
-            .catch( (error) => {
-                console.log(error.response.data);
-                reject(error.response.data);
-            });
+    axios.get(api)
+        .then( (response) => {
+            console.log(response.data);
+            resolve(response.data.audiofile);
+        })
+        .catch( (error) => {
+            console.log(error.response.data);
+            reject(error.response.data);
+        });
     });
 }
 
@@ -23,7 +23,8 @@ async function load_file_status() {
     let files = await query.exec();
     for(let i=0;i<files.length;i++) {
         let file = files[i];
-        let info = await get_file_status(file.order_audiofiles);
+        let order_audiofile  = file.order_audiofiles[0];
+        let info = await get_file_status(order_audiofile);
         if(info.statename) {
             file.status = info.statename;
             await file.save(); 
