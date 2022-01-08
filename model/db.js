@@ -19,7 +19,10 @@ const FILE = mongoose.model('File', {
     order_message: String
 });
 
+function close() {
+    mongoose.disconnect();
+}
 
 module.exports = {
-    FILE
+    FILE, close
 };
