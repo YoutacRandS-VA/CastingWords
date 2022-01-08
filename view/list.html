@@ -24,7 +24,7 @@
                     </td>
                 <% } %>
                 <td>  
-                    <% if(display_button != "submitted") { %>
+                    <% if(display_button == "uploaded") { %>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button>
                     <% }else{ %>
                         <!-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button> -->

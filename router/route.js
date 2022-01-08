@@ -49,7 +49,7 @@ route.post('/api/submit', async ctx => {
   try{
   let file_name = ctx.request.body.file_name;
   let result = await db.FILE.findOne({"file_name": file_name});
-  if(result.status!="submitted" && result.order_id == undefined) {
+  if(result.status=="uploaded" && result.order_id == undefined) {
     result.status = "submitted";
     let file_path = encodeURI(file_name);
     let order = await castingwords.submit({
