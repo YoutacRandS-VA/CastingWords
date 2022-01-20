@@ -5,6 +5,7 @@ services:
     image: castingwords
     volumes:
     - ./uploads:/usr/src/app/uploads
+    - ./transcript:/usr/src/app/transcript
     - "/etc/timezone:/etc/timezone:ro"
     - "/etc/localtime:/etc/localtime:ro"
     working_dir: /usr/src/app
