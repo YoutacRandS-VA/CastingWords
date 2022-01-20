@@ -2,7 +2,7 @@
     <table class="table table-hover table-bordered">
         <thead>
             <% for(var i=0; i<keys.length; i++) {%>
-                <th><%= keys[i] %></th>
+                <th class='<%= keys[i] %>'><%= keys[i] %></th>
             <% } %>
             <th></th>
         </thead>
@@ -100,3 +100,8 @@
         });
     });
 </script>
+<style>
+    .file_name {
+        width: 20%;
+    }
+</style>
