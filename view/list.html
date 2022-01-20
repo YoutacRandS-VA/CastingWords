@@ -11,12 +11,18 @@
                 <% var keys = Object.keys(fileList[i]); %>
                 <% var file_name = fileList[i]["file_name"]; %>
                 <% var display_button = fileList[i]["status"]; %>
+                <% var status = fileList[i]["status"]; %>
+                <% var orderId = fileList[i]["order_id"]; %>
                 <tr id='<%= file_name %>'>
                 <% for(var j=0; j<keys.length; j++) {%>
                     <td>
                     <% if(keys[j] == "file_name") { %>
                         <a target="_blank" href='/uploads/<%= file_name %>'>
                             <%= fileList[i][keys[j]] %>
+                        </a>
+                    <% }else if(keys[j] == "status" && status == "Delivered") { %>
+                        <a target="_blank" href='<%= orderId %>/transcript.txt'>
+                            Delivered
                         </a>
                     <% }else{ %>
                         <%= fileList[i][keys[j]] %>
@@ -26,8 +32,6 @@
                 <td>  
                     <% if(display_button == "uploaded") { %>
                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button>
-                    <% }else{ %>
-                        <!-- <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button> -->
                     <% } %>
                 </td>
                 </tr>

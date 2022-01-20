@@ -17,7 +17,7 @@ const FILE = mongoose.model('File', {
     order_id: String,
     order_audiofiles: [Number],
     order_message: String,
-    order_duration: Number
+    order_duration: Number,
 });
 
 function close() {

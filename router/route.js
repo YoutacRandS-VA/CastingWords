@@ -23,6 +23,7 @@ const { v4: uuidv4 } = require('uuid');
 
 const environment = process.env.NODE_ENV!="production"? "development":"production";
 
+
 route.get('/', async (ctx) => {
   try {
     await ctx.render('index', {'environment': environment, 'listPage': false});
@@ -38,6 +39,21 @@ route.get('/list', async (ctx) => {
     let filesArray = await(await db.FILE.find({})).map(_=>{ return utils.mapper(_)  }).reverse();
     let keys = Object.keys(utils.mapper(Object));
     await ctx.render('list', {'fileList': filesArray, 'keys': keys, 'environment': environment, 'listPage': true});
+  } catch (e) {
+    ctx.body =  {'result':'fail', 'message': e.name};
+    ctx.status = 404;
+    console.error(e);
+  }
+});
+
+route.get('/api/transcript/:orderId', async (ctx) => {
+  try {
+    let orderId = ctx.params.orderId;
+    let result = await db.FILE.find({"order_id": orderId}, "transcript");
+    let fileStr = Buffer.from(result).toString();
+    fs.writeFileSync(`${orderId}.txt`, fileStr);
+    return ctx.attachment(`${orderId}.txt`, { type: 'inline' });
+
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
     ctx.status = 404;
@@ -62,6 +78,7 @@ route.post('/api/submit', async ctx => {
     result.order_id = order.order;
     result.order_audiofiles = order.audiofiles;
     result.order_message = order.message;
+    fs.mkdirSync(`transcript/${result.order_id}`);
   }
   await result.save();
 

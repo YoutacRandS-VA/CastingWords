@@ -20,6 +20,8 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${rt}`);
 });
 
+app.use(require('koa-static')('transcript', {}));
+
 const apiRoute = require('./router/route.js').route;
 app.use(apiRoute.middleware());
 
