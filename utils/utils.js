@@ -17,7 +17,7 @@ function mapper(_) {
         file_size: `${_.file_size}MB`,
         order_id:  _.order_id,
         audiofiles: _.order_audiofiles,
-        duration: _.order_duration+" min",
+        duration: (_.order_duration)?_.order_duration+" min":"",
         speed_level: _.speed_level,
         status: _.status,
     };

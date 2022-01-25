@@ -19,15 +19,12 @@
                         <a target="_blank" href='/uploads/<%= file_name %>'>
                             <%= fileList[i][keys[j]] %>
                         </a>
-                    <% }else if(keys[j] == "status") { %>
-                        <% if(status == "Delivered") { %>
+                    <% }else if(keys[j] == "status" && status == "Delivered") { %>
                             <a target="_blank" href='<%= orderId %>/transcript.txt'>
                                 Delivered
                             </a>
-                        <% }%>
-                        <% if(status == "uploaded") { %> 
+                    <% } else if(keys[j] == "status" && status == "uploaded") { %> 
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button>
-                        <% } %>
                     <% }else{ %>
                         <%= fileList[i][keys[j]] %>
                     <% } %>
