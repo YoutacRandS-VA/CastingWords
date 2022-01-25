@@ -118,7 +118,7 @@ route.post(
         speaker: body.speaker,
         notes: body.notes,
         speed_level: body.speed_level,
-        status: 'unprocessed',
+        status: 'uploaded',
         file_name: newFileName,
         file_size: size,
         file_upload_date: new Date()
