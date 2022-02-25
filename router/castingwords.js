@@ -11,6 +11,10 @@ async function submit(payload){
     //         "notes":[SOME_NOTES],
     //         "tags":"Interview"
     //    }' \
+    //   test - Creates a test only order that will not be transcribed.
+    //   notes - text feild with comments for the transcribers about this audio
+    //   name - Repeatable parameter with names of the speakers in the audio. 
+    //   names -  a synonym for name
     const api = "https://castingwords.com/store/API4/order_url";
     let body = payload;
     body.api_key = api_key;

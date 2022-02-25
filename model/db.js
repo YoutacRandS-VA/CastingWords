@@ -12,6 +12,7 @@ const FILE = mongoose.model('File', {
     status: String,
     file_name: String,
     file_size: Number,
+    youtube_url: String,
     file_upload_date: Date,
     speed_level: String,
     order_id: String,
