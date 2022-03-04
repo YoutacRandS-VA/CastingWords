@@ -60,8 +60,10 @@
             </div>
             <div class="tab-pane fade" id="url" role="tabpanel" aria-labelledby="url-tab">
               <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">Youtube</label>
-                <textarea class="form-control" id="Youtube" rows="2" placeholder="(Youtube URL)"></textarea>
+                <label for="exampleFormControlTextarea1" class="form-label">Youtube URL <font style="color:red">(*)</font></label>
+                <textarea class="form-control" id="video_url" rows="2" placeholder="sample: https://www.youtube.com/watch?v=ibAoaqrZmfw"></textarea>
+                <br>
+                <button onclick="submit();" id="submit_btn" class="btn btn-primary">Submit 送出</button>
               </div>
             </div>
           </div>
@@ -106,10 +108,7 @@
         </div>
       `
     }
-
-
-    // Function to upload file
-    function upload() {
+    function checkBasicField() {
       let title = document.querySelector("#title").value;
       let speaker = document.querySelector("#speaker").value;
       let notes = document.querySelector("#notes").value;
@@ -125,8 +124,71 @@
         }
         show_alert(`${field} is null`, "warning");
         alert(`${field} is null`);
+        return false;
+      }else {
+        return true;
+      }
+    }
+
+    function submit() {
+      // Function to upload youtube url
+      if(!checkBasicField()) {
         return;
       }
+
+      let title = document.querySelector("#title").value;
+      let speaker = document.querySelector("#speaker").value;
+      let notes = document.querySelector("#notes").value;
+      let speed_level = document.querySelector("#speed_level").value;
+      let video_url = document.querySelector("#video_url").value;
+
+      if(video_url=='') {
+        show_alert(`video_url is null`, "warning");
+        alert(`video_url is null`);
+        return;
+      }
+      if(video_url.includes(" ")) {
+        show_alert(`video_url contains space`, "warning");
+        alert(`video_url contains space`);
+        return; 
+      }
+      let dict = {
+        'title': title,
+        'speaker': speaker,
+        'notes': notes,
+        'speed_level': speed_level,
+        'video_url': video_url
+      };
+      axios.post('/api/upload', dict)
+      .then(function (response) {
+        if(response.data.result!='fail') {
+          show_alert(`${response.data.message}`, "success");
+          reset();
+          document.querySelector("#video_url").value = "";
+          if(response.data.message.includes('exists')) {
+            alert('video_url exists. 影片已上傳過請注意!!');
+          }
+        }else {
+          show_alert(`${response.data.message}`, "danger");
+          alert(`${response.data.message}`);
+        }
+      })
+      .catch(function (error) {
+        show_alert(error, "danger");
+      });
+    }
+
+    // Function to upload file
+    function upload() {
+
+      if(!checkBasicField()) {
+        return;
+      }
+
+      let title = document.querySelector("#title").value;
+      let speaker = document.querySelector("#speaker").value;
+      let notes = document.querySelector("#notes").value;
+      let speed_level = document.querySelector("#speed_level").value;
 
       if (!input.value) {
         show_alert("No file selected", "warning")

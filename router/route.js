@@ -63,13 +63,22 @@ route.get('/api/transcript/:orderId', async (ctx) => {
 
 route.post('/api/submit', async ctx => {
   try{
+  
   let file_name = ctx.request.body.file_name;
+  let is_video_url = false;
+  if(file_name.includes("http")) {
+    is_video_url = true;
+  }
   let result = await db.FILE.findOne({"file_name": file_name});
   if(result.status=="uploaded" && result.order_id == undefined) {
     result.status = "submitted";
-    let file_path = encodeURI(file_name);
+    let url = result.video_url;
+    if(!is_video_url) {
+      let file_path = encodeURI(file_name);
+      url = `https://castingwords.pdis.dev/uploads/${file_path}`;
+    }
     let order = await castingwords.submit({
-      "url": `https://castingwords.pdis.dev/uploads/${file_path}`,
+      "url": url,
       "title": result.title,
       "names": result.speaker.split(","),
       "notes": result.notes,
@@ -78,7 +87,9 @@ route.post('/api/submit', async ctx => {
     result.order_id = order.order;
     result.order_audiofiles = order.audiofiles;
     result.order_message = order.message;
-    fs.mkdirSync(`transcript/${result.order_id}`);
+    if(!fs.existsSync(`transcript/${result.order_id}`)) {
+      fs.mkdirSync(`transcript/${result.order_id}`);
+    }
   }
   await result.save();
 
@@ -105,29 +116,66 @@ route.post(
   ]),
   async ctx => {
     let body = ctx.request.body;
-    let files = ctx.files.file;
-    for(let i=0;i<files.length;i++){
-      let file = files[i];
-      let originalFileName = file.originalname;
-      let uuid = uuidv4().split("-").pop();
-      let newFileName = `${body.title}__${uuid}__${originalFileName}`;
-      fs.renameSync(`uploads/${file.filename}`, `uploads/${newFileName}`);
-      let size = utils.getFileSize(newFileName);
+
+    if(ctx.files) {
+      let files = ctx.files.file;
+      for(let i=0;i<files.length;i++){
+        let file = files[i];
+        let originalFileName = file.originalname;
+        let uuid = uuidv4().split("-").pop();
+        let newFileName = `${body.title}__${uuid}__${originalFileName}`;
+        fs.renameSync(`uploads/${file.filename}`, `uploads/${newFileName}`);
+        let size = utils.getFileSize(newFileName);
+        const FILE = new db.FILE({
+          title: body.title,
+          speaker: body.speaker,
+          notes: body.notes,
+          speed_level: body.speed_level,
+          status: 'uploaded',
+          file_name: newFileName,
+          file_size: size,
+          file_upload_date: new Date()
+        })
+        await FILE.save();
+      }
+      ctx.body = {
+        'message': `Upload success.\ttitle: ${body.title}`
+      }
+    }else {
+      // video_url upload
+      let video_url = body.video_url;
+      if(!utils.videoURLValider(video_url)) {
+        ctx.body = {
+          'result': 'fail', 
+          'message': `Upload fail. video_url is invalid.`
+        }
+        return; 
+      }
+      let result = await db.FILE.findOne({"file_name": video_url});
+      if(result) {
+        ctx.body = {
+          'message': `Upload success. video_url exists.`
+        }
+      }
+
       const FILE = new db.FILE({
         title: body.title,
         speaker: body.speaker,
         notes: body.notes,
         speed_level: body.speed_level,
         status: 'uploaded',
-        file_name: newFileName,
-        file_size: size,
+        video_url: video_url,
+        file_name: video_url,
         file_upload_date: new Date()
       })
       await FILE.save();
+      if(!result) {
+        ctx.body = {
+          'message': `Upload success.\ttitle: ${body.title}`
+        }
+      }
     }
-    ctx.body = {
-      'message': `Upload success.\ttitle: ${body.title}`
-    }
+   
   }
 );
 

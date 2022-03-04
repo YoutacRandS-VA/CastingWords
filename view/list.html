@@ -10,13 +10,14 @@
         <tbody>
                 <% var keys = Object.keys(fileList[i]); %>
                 <% var file_name = fileList[i]["file_name"]; %>
+                <% var file_url = fileList[i]["file_url"]; %>
                 <% var status = fileList[i]["status"]; %>
                 <% var orderId = fileList[i]["order_id"]; %>
                 <tr id='<%= file_name %>'>
                 <% for(var j=0; j<keys.length; j++) {%>
                     <td>
                     <% if(keys[j] == "file_name") { %>
-                        <a target="_blank" href='/uploads/<%= file_name %>'>
+                        <a target="_blank" href='<%= file_url %>'>
                             <%= fileList[i][keys[j]] %>
                         </a>
                     <% }else if(keys[j] == "status" && status == "Delivered") { %>
@@ -24,7 +25,7 @@
                                 Delivered
                             </a>
                     <% } else if(keys[j] == "status" && status == "uploaded") { %> 
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop"  data-bs-whatever="<%= file_name %>">Submit</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-bs-file_name="<%= file_name %>">Submit</button>
                     <% }else{ %>
                         <%= fileList[i][keys[j]] %>
                     <% } %>
@@ -72,15 +73,15 @@
     var modalElement = document.getElementById('staticBackdrop');
     var modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
     var file_name = "";
+    var file_url = "";
     modalElement.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
-        var recipient = button.getAttribute('data-bs-whatever')
+        file_name = button.getAttribute('data-bs-file_name')
         var modalTitle = modalElement.querySelector('.modal-title')
         var modalBodyInput = modalElement.querySelector('.modal-body input')
-        file_name = recipient;
     })
     document.getElementById('submitButton').addEventListener("click", function() {
-        if(file_name==""){
+        if(file_name == ""){
             return;
         }
         modalInstance.hide();
@@ -88,7 +89,7 @@
         loadingModal.show();
 
         axios.post('/api/submit', {
-            file_name: file_name
+            file_name: file_name,
         }).then(function (response) {
             loadingModal.hide();
             location.reload();
