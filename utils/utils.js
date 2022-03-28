@@ -1,5 +1,6 @@
 const fs = require('fs');
 const moment = require("moment");
+const axios = require('axios');
 
 function getFileSize(file_name) {
     let fileStat = fs.statSync(`uploads/${file_name}`);
@@ -17,6 +18,7 @@ function mapper(_) {
         file_url_str = _.video_url;
     }
     return {
+        file_id: _.id,
         title: _.title,
         speaker: _.speaker,
         notes: _.notes,
@@ -38,18 +40,20 @@ function videoURLValider(url) {
     if(!url.includes('https')) {
         valid = false;
     }
-    if(!url.includes('youtube')) {
+    if(!url.includes('youtu')) {
         valid = false;
     }
     return valid;
 }   
 
-function getVideoURL(url) {
-  
-
+async function getVideoRealURL(url) {
+    return axios.get(url).then( response=> {
+        return response.request.res.responseUrl;
+    }); 
 }
 
 
+
 module.exports = {
-    getFileSize, mapper, videoURLValider
+    getFileSize, mapper, videoURLValider, getVideoRealURL
 };

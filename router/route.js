@@ -37,7 +37,7 @@ route.get('/', async (ctx) => {
 route.get('/list', async (ctx) => {
   try {
     let filesArray = await(await db.FILE.find({})).map(_=>{ return utils.mapper(_)  }).reverse();
-    let keys = Object.keys(utils.mapper(Object));
+    let keys = Object.keys(utils.mapper(Object)).filter(_=> _ != "file_id");
     await ctx.render('list', {'fileList': filesArray, 'keys': keys, 'environment': environment, 'listPage': true});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};
@@ -65,11 +65,12 @@ route.post('/api/submit', async ctx => {
   try{
   
   let file_name = ctx.request.body.file_name;
+  let file_id = ctx.request.body.file_id;
   let is_video_url = false;
-  if(file_name.includes("http")) {
+  let result = await db.FILE.findOne({"_id": file_id});
+  if(result.file_name.includes("http")) {
     is_video_url = true;
   }
-  let result = await db.FILE.findOne({"file_name": file_name});
   if(result.status=="uploaded" && result.order_id == undefined) {
     result.status = "submitted";
     let url = result.video_url;
@@ -106,6 +107,7 @@ route.post('/api/submit', async ctx => {
     ctx.body = {
       "message": e
     };
+    console.log(e);
   }
 });
 
@@ -150,6 +152,10 @@ route.post(
           'message': `Upload fail. video_url is invalid.`
         }
         return; 
+      }
+      let nvideo_url = await utils.getVideoRealURL(video_url);
+      if(nvideo_url) {
+        video_url = nvideo_url;
       }
       let result = await db.FILE.findOne({"file_name": video_url});
       if(result) {
