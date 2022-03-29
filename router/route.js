@@ -64,11 +64,11 @@ route.get('/api/transcript/:orderId', async (ctx) => {
 route.post('/api/submit', async ctx => {
   try{
   
-  let file_name = ctx.request.body.file_name;
   let file_id = ctx.request.body.file_id;
   let is_video_url = false;
   let result = await db.FILE.findOne({"_id": file_id});
-  if(result.file_name.includes("http")) {
+  let file_name = result.file_name;
+  if(file_name.includes("http")) {
     is_video_url = true;
   }
   if(result.status=="uploaded" && result.order_id == undefined) {
