@@ -3,7 +3,7 @@ const fs = require('fs');
 const key = require('./../key.js');
 
 const options = {
-  'headless': false,  // no gui browser
+  'headless': true,  // no gui browser
   'userDataDir':"./browser" // save browser data,session,cookie
 };
 
