@@ -15,6 +15,8 @@ const FILE = mongoose.model('File', {
     video_url: String, 
     file_upload_date: Date,
     speed_level: String,
+    receipt_send: Boolean,
+    order_date: Date,
     order_id: String,
     order_audiofiles: [Number],
     order_message: String,

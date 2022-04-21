@@ -22,7 +22,10 @@
                         </a>
                     <% }else if(keys[j] == "status" && status == "Delivered") { %>
                             <a target="_blank" href='<%= orderId %>/transcript.txt'>
-                                Delivered
+                                Transcript
+                            </a>
+                            <a target="_blank" href='<%= orderId %>/receipt.html'>
+                                Receipt
                             </a>
                     <% } else if(keys[j] == "status" && status == "uploaded") { %> 
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-bs-file_id="<%= file_id %>">Submit</button>

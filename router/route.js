@@ -8,18 +8,15 @@ const utils = require('../utils/utils.js');
 const castingwords = require('./castingwords.js');
 
 const fs = require('fs');
+const config = require('./../config.json')
+const upload_path = config.domain + config.upload_path;
+console.log(`upload_path: ${upload_path}`);
+
 const multer = require('@koa/multer');
 const upload = multer({ dest: 'uploads/' });
 const moment = require('moment');
 const { v4: uuidv4 } = require('uuid');
 
-/**
- * async checkAuth
- */
-// route.use(async (ctx, next) => {
-//   ctx.auth = await auth.checkAuth(ctx);
-//   await next();
-// });
 
 const environment = process.env.NODE_ENV!="production"? "development":"production";
 
@@ -76,7 +73,7 @@ route.post('/api/submit', async ctx => {
     let url = result.video_url;
     if(!is_video_url) {
       let file_path = encodeURI(file_name);
-      url = `https://castingwords.pdis.dev/uploads/${file_path}`;
+      url = `${domain}/${upload_path}/${file_path}`
     }
     let order = await castingwords.submit({
       "url": url,
@@ -88,6 +85,7 @@ route.post('/api/submit', async ctx => {
     result.order_id = order.order;
     result.order_audiofiles = order.audiofiles;
     result.order_message = order.message;
+    result.order_date = new Date();
     if(!fs.existsSync(`transcript/${result.order_id}`)) {
       fs.mkdirSync(`transcript/${result.order_id}`);
     }
