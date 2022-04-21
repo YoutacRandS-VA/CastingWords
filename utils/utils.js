@@ -17,6 +17,10 @@ function mapper(_) {
     if(_.video_url) {
         file_url_str = _.video_url;
     }
+    let order_date = _.order_date;
+    if(order_date) {
+      order_date = moment(_.order_date).locale('zh_TW').format('LLLL');
+    }
     return {
         file_id: _.id,
         title: _.title,
@@ -26,7 +30,7 @@ function mapper(_) {
         file_url: file_url_str,
         file_size: file_size_str,
         file_upload_date: moment(_.file_upload_date).locale('zh_TW').format('LLLL'),
-        order_date: moment(_.order_date).locale('zh_TW').format('LLLL'),
+        order_date: order_date,
         order_id:  _.order_id,
         audiofiles: _.order_audiofiles,
         duration: (_.order_duration)?_.order_duration+" min":"",
@@ -45,12 +49,12 @@ function videoURLValider(url) {
         valid = false;
     }
     return valid;
-}   
+}
 
 async function getVideoRealURL(url) {
     return axios.get(url).then( response=> {
         return response.request.res.responseUrl;
-    }); 
+    });
 }
 
 
