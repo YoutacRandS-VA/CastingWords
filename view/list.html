@@ -94,8 +94,13 @@
         axios.post('/api/submit', {
             file_id: file_id,
         }).then(function (response) {
-            loadingModal.hide();
-            location.reload();
+            if(response.data.message=="ok") {
+                loadingModal.hide();
+                location.reload();
+            }else {
+                alert(JSON.stringify(response.data.message));
+                loadingModal.hide();
+            }
         }).catch(function (error) {
             console.log(error);
         });
