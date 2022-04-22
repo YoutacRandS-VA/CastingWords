@@ -13,7 +13,6 @@ async function submit(payload){
     //    }' \
     //   test - Creates a test only order that will not be transcribed.
     //   notes - text feild with comments for the transcribers about this audio
-    //   name - Repeatable parameter with names of the speakers in the audio. 
     //   names -  a synonym for name
     const api = "https://castingwords.com/store/API4/order_url";
     let body = payload;
@@ -21,6 +20,9 @@ async function submit(payload){
     body.tags = "Interview";
     if(process.env.NODE_ENV!="production") {
         body.test = 1;
+        // prevent bug in names field.
+        delete body['names'];
+        console.log('body["names"] was delete in development mode.');
     }
     console.log(body);
     axios.post(api, body)
