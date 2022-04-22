@@ -58,49 +58,73 @@ route.get('/api/transcript/:orderId', async (ctx) => {
   }
 });
 
+
+route.post('/api/delete', async ctx => {
+  try{
+    let file_id = ctx.request.body.file_id;
+    let result = await db.FILE.findOne({"_id": file_id});
+    if(result.status=="uploaded" && result.order_id == undefined)  {
+      await db.FILE.deleteOne({ _id: result._id });
+      ctx.body = {
+        "message": "ok"
+      };
+    }else {
+      ctx.body = {
+        "message": "fail"
+      };
+    }
+  }catch(e) {
+    if(e) {
+      ctx.body = {
+        "message": e
+      };
+      console.log(e); 
+    }
+  }
+});
+
 route.post('/api/submit', async ctx => {
   try{
-  
-  let file_id = ctx.request.body.file_id;
-  let is_video_url = false;
-  let result = await db.FILE.findOne({"_id": file_id});
-  let file_name = result.file_name;
-  if(file_name.includes("http")) {
-    is_video_url = true;
-  }
-  if(result.status=="uploaded" && result.order_id == undefined) {
-    result.status = "submitted";
-    let url = result.video_url;
-    if(!is_video_url) {
-      let file_path = encodeURI(file_name);
-      url = `${domain}/${upload_path}/${file_path}`
+    let file_id = ctx.request.body.file_id;
+    let is_video_url = false;
+    let result = await db.FILE.findOne({"_id": file_id});
+    let file_name = result.file_name;
+    if(file_name.includes("http")) {
+      is_video_url = true;
     }
-    let order = await castingwords.submit({
-      "url": url,
-      "title": result.title,
-      "names": result.speaker.split(","),
-      "notes": result.notes,
-      "sku": result.speed_level
-    });
-    result.order_id = order.order;
-    result.order_audiofiles = order.audiofiles;
-    result.order_message = order.message;
-    result.order_date = new Date();
-    if(!fs.existsSync(`transcript/${result.order_id}`)) {
-      fs.mkdirSync(`transcript/${result.order_id}`);
+    if(result.status=="uploaded" && result.order_id == undefined) {
+      result.status = "submitted";
+      let url = result.video_url;
+      if(!is_video_url) {
+        let file_path = encodeURI(file_name);
+        url = `${domain}/${upload_path}/${file_path}`
+      }
+      let order = await castingwords.submit({
+        "url": url,
+        "title": result.title,
+        "names": result.speaker.split(","),
+        "notes": result.notes,
+        "sku": result.speed_level
+      });
+      result.order_id = order.order;
+      result.order_audiofiles = order.audiofiles;
+      result.order_message = order.message;
+      result.order_date = new Date();
+      if(!fs.existsSync(`transcript/${result.order_id}`)) {
+        fs.mkdirSync(`transcript/${result.order_id}`);
+      }
     }
-  }
-  await result.save();
+    await result.save();
 
-  if(file_name && result) {
-    ctx.body = {
-      "message": "ok"
-    };
-  }else {
-    ctx.body = {
-      "message": "fail"
-    };
-  }
+    if(file_name && result) {
+      ctx.body = {
+        "message": "ok"
+      };
+    }else {
+      ctx.body = {
+        "message": "fail"
+      };
+    }
   }catch(e) {
     ctx.body = {
       "message": e

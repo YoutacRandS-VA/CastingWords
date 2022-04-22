@@ -28,7 +28,9 @@
                                 Receipt
                             </a>
                     <% } else if(keys[j] == "status" && status == "uploaded") { %> 
-                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-bs-file_id="<%= file_id %>">Submit</button>
+                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalView" data-bs-type="Submit" data-bs-file_url="<%= file_url %>" data-bs-file_id="<%= file_id %>">Submit</button>
+                            <br><br>
+                            <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalView" data-bs-type="Delete" data-bs-file_url="<%= file_url %>" data-bs-file_id="<%= file_id %>">Delete</button>
                     <% } else { %>
                         <%= fileList[i][keys[j]] %>
                     <% } %>
@@ -43,20 +45,20 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="modalView" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Do you want to submit this file to castingWords service ?</h5>
+          <h5 class="modal-title" id="model-title">Do you want to ?</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
+        <div id="modal-body" class="modal-body">
           This action can't be undo.
         </div>
     
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button id="submitButton" type="button" class="btn btn-primary">Submit</button>
+          <button id="actionButton" type="button" class="btn btn-primary"></button>
         </div>
       </div>
     </div>
@@ -72,26 +74,40 @@
 </div>
 
 
+
 <script>
-    var modalElement = document.getElementById('staticBackdrop');
+    var modalElement = document.getElementById('modalView');
     var modalInstance = bootstrap.Modal.getOrCreateInstance(modalElement);
     var file_id = "";
     var file_url = "";
+    var type = "";
     modalElement.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
         file_id = button.getAttribute('data-bs-file_id')
-        var modalTitle = modalElement.querySelector('.modal-title')
-        var modalBodyInput = modalElement.querySelector('.modal-body input')
+        file_url = button.getAttribute('data-bs-file_url')
+        type = button.getAttribute('data-bs-type')
+        // var modalTitle = modalElement.querySelector('.modal-title')
+        // var modalBodyInput = modalElement.querySelector('.modal-body input')
+   
+        document.querySelector('#model-title').innerText = `Do you want to ${type} ?`
+        document.querySelector('#modal-body').innerText = `${file_url} will be ${type}.\nThis action can't be undo.`
+        document.querySelector('#actionButton').innerText = type;
     })
-    document.getElementById('submitButton').addEventListener("click", function() {
+    document.getElementById('actionButton').addEventListener("click", function() {
         if(file_id == ""){
             return;
         }
         modalInstance.hide();
         let loadingModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('loadingModal'));
         loadingModal.show();
+        
+        // console.log(`file_id: ${file_id}, type: ${type}`)
+        let url = "/api/submit"
+        if(type=='Delete') {
+            url = "/api/delete";
+        }
 
-        axios.post('/api/submit', {
+        axios.post(url, {
             file_id: file_id,
         }).then(function (response) {
             if(response.data.message=="ok") {
