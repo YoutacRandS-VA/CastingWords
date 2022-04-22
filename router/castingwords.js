@@ -31,7 +31,7 @@ async function submit(payload){
             resolve(response.data);
         })
         .catch( (error) => {
-            console.log(error.response.data);
+            // console.log(error.response.data);
             reject(error.response.data);
         });
     });
