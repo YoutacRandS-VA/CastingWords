@@ -26,7 +26,6 @@ function mapper(_) {
         title: _.title,
         speaker: _.speaker,
         notes: _.notes,
-        file_name: _.file_name,
         file_url: file_url_str,
         file_size: file_size_str,
         file_upload_date: moment(_.file_upload_date).locale('zh_TW').format('LLLL'),

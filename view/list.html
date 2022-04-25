@@ -8,7 +8,6 @@
         </thead>
             <% for(var i = 0; i < fileList.length; i++) {%>
         <tbody>
-                <% var file_name = fileList[i]["file_name"]; %>
                 <% var file_id = fileList[i]["file_id"]; %>
                 <% var file_url = fileList[i]["file_url"]; %>
                 <% var status = fileList[i]["status"]; %>
@@ -16,7 +15,7 @@
                 <tr id='<%= file_id %>'>
                 <% for(var j = 0; j < keys.length; j++) {%>
                     <td>
-                    <% if(keys[j] == "file_name") { %>
+                    <% if(keys[j] == "file_url") { %>
                         <a target="_blank" href='<%= file_url %>'>
                             <%= fileList[i][keys[j]] %>
                         </a>
