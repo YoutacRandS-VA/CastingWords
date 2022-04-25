@@ -97,7 +97,7 @@ route.post('/api/submit', async ctx => {
       let url = result.video_url;
       if(!is_video_url) {
         let file_path = encodeURI(file_name);
-        url = `${domain}/${upload_path}/${file_path}`
+        url = `${upload_path}${file_path}`
       }
       let order = await castingwords.submit({
         "url": url,
