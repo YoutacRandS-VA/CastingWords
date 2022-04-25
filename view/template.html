@@ -17,10 +17,17 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link" aria-current="page" href="/">Upload 上傳檔案</a>
-                        <a class="nav-link" href="/list">File List 檔案列表</a>
-                    </div>
+                    <ul class="navbar-nav">
+                        <li>
+                            <a class="nav-link" aria-current="page" href="/">Upload 上傳檔案</a>
+                        </li>
+                        <li>
+                            <a class="nav-link" href="/list">File List 檔案列表</a>
+                        </li>
+                        <li>
+                            <a class="nav-link">env: <%= environment %></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -28,13 +35,7 @@
     <%- body %>
     <footer class="footer" style="bottom:0; position: absolute;">
         <div class="container">
-            <span class="text-muted">
-                <% if(listPage) { %>
-                    <!-- <p>status狀態: uploaded(檔案上傳) -> submitted (已提交檔案) -> On Hold (等待) -> Pre-Processing (前置處理) -> Transcribing (轉錄中) -> Delivered (已完成)</p> -->
-                <% }else{ %>
-                <% } %>
-                <p>env: <%= environment %> </p>
-            </span>
+            <!-- <p>status狀態: uploaded(檔案上傳) -> submitted (已提交檔案) -> On Hold (等待) -> Pre-Processing (前置處理) -> Transcribing (轉錄中) -> Delivered (已完成)</p> -->
         </div>
     </footer>
 </body>
