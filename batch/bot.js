@@ -97,7 +97,7 @@ async function start(order_id) {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
-    fs.writeFileSync(`${dir}/receipt.html`, html_contents);
+    fs.writeFileSync(`${dir}/Order_${order_id}_Receipt_III.html`, html_contents);
 
     
     await browser.close();
