@@ -40,13 +40,14 @@ async function sendEmail(order_id) {
 
     var data = {
       from: `PDIS <${config.mailgunSender}>`,
-      to: 'peterlee0127@gmail.com',
-      subject: `CastingWord結報收-${order_id}`,
+      to: config.mailgunTarget,
+      cc: config.mailgunCC,
+      subject: `資策會CastingWord結報收據-${order_id}`,
       text: `
       您好
-
-      逐字稿訂單 ${order_id} 已完成
-      該訂單收據可在 <a href="${config.domain}/${order_id}/receipt.html">此</a> 下載
+      逐字稿訂單編號 ${order_id} 已完成
+      該訂單收據可在 ${config.domain}/${order_id}/Order_${order_id}_Receipt_III.html 下載
+      逐字稿 ${config.domain}/${order_id}/${order_id}_transcript.txt
       
       感謝
       `
@@ -80,11 +81,11 @@ async function batchGetOrderStatus() {
                 if (!fs.existsSync(dir)) {
                     fs.mkdirSync(dir);
                 }
-                let transcriptPath = `${dir}/transcript.txt`;
+                let transcriptPath = `${dir}/${file.order_id}_transcript.txt`;
                 if(!fs.existsSync(transcriptPath)) {
                     fs.writeFileSync(transcriptPath, transcript);
                 }
-                let receiptPath = `${dir}/receipt.html`;
+                let receiptPath = `${dir}/Order_${file.order_id}_Receipt_III.html`;
                 if(!fs.existsSync(receiptPath)) {
                     await bot.start(order_id);
                 } 

@@ -20,11 +20,11 @@
                             <%= fileList[i][keys[j]] %>
                         </a>
                     <% }else if(keys[j] == "status" && status == "Delivered") { %>
-                            <a target="_blank" href='<%= orderId %>/transcript.txt'>
+                            <a target="_blank" href='<%= orderId %>/<%= orderId %>_transcript.txt'>
                                 Transcript
                             </a>
                             <br><br>
-                            <a target="_blank" href='<%= orderId %>/receipt.html'>
+                            <a target="_blank" href='<%= orderId %>/Order_<%= orderId %>_Receipt_III.html'>
                                 Receipt
                             </a>
                     <% } else if(keys[j] == "status" && status == "uploaded") { %> 
