@@ -1,4 +1,4 @@
-<div class="table-responsive">
+<div class="table-responsive"  style="max-height: 90%;">
     <table class="table table-hover table-bordered">
         <thead>
             <% for(var i = 0 ; i < keys.length; i++) {%>
@@ -73,7 +73,11 @@
     </div>
 </div>
 
-
+<footer class="footer">
+    <div class="container">
+      <span class="text-muted"></span>
+    </div>
+  </footer>
 
 <script>
     var modalElement = document.getElementById('modalView');
@@ -123,13 +127,25 @@
     });
 </script>
 <style>
-    .title {
-        width: 15%;
+    .table-responsive{
+        overflow-x: scroll;
     }
-    .file_name {
-        width: 10%;
+    .table-responsive::-webkit-scrollbar {
+        -webkit-appearance: none;
     }
-    .notes {
-        width: 10%;
+    .table-responsive::-webkit-scrollbar:vertical {
+        width: 12px;
     }
-</style>
+    .table-responsive::-webkit-scrollbar:horizontal {
+        height: 12px;
+    }
+    .table-responsive::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10px;
+        border: 2px solid #ffffff;
+    }
+    .table-responsive::-webkit-scrollbar-track {
+        border-radius: 10px;
+        background-color: #ffffff;
+    }
+    </style>
