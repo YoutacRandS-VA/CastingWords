@@ -37,22 +37,30 @@ async function getTranscript(order_audiofile) {
 }
 
 async function sendEmail(order_id) {
+    let order_ids = order_id.split(",").reverse();
+    let first_order_id = order_ids.at(0);
+    let content = `
+        您好
+        逐字稿訂單編號 ${first_order_id} 已完成，共有${order_ids.length}筆收據，第一筆為主收據`;
+    for(let i=0;i<order_ids.length;i++) {
+        let order_id = order_ids[i];
+        content = content + `
+        該訂單收據可在 ${config.domain}/${first_order_id}/Order_${order_id}_Receipt_III.html 下載`;
+    }
+    content = content+`
+        逐字稿 ${config.domain}/${first_order_id}/${first_order_id}_transcript.txt
+
+        感謝 
+    `;
 
     var data = {
       from: `PDIS <${config.mailgunSender}>`,
       to: config.mailgunTarget,
       cc: config.mailgunCC,
-      subject: `資策會CastingWord結報收據-${order_id}`,
-      text: `
-      您好
-      逐字稿訂單編號 ${order_id} 已完成
-      該訂單收據可在 ${config.domain}/${order_id}/Order_${order_id}_Receipt_III.html 下載
-      逐字稿 ${config.domain}/${order_id}/${order_id}_transcript.txt
-      
-      感謝
-      `
-    };
-  
+      subject: `資策會CastingWord結報收據-${first_order_id}`,
+      text: content
+    }
+   
     mailgun.messages().send(data, function (error, body) {
       if(error) {
         console.log(error);
