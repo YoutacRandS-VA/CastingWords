@@ -34,6 +34,12 @@
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalView" data-bs-type="Submit" data-bs-file_url="<%= file_url %>" data-bs-file_id="<%= file_id %>">Submit</button>
                             <br><br>
                             <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalView" data-bs-type="Delete" data-bs-file_url="<%= file_url %>" data-bs-file_id="<%= file_id %>">Delete</button>
+                    <% } else if(keys[j] == "price") { %>
+                        <% if(orderId.length>1) { %>
+                            <p style="color:#ff5050"><%= fileList[i][keys[j]] %></p>
+                        <% } else { %> 
+                            <p><%= fileList[i][keys[j]] %></p>
+                        <% } %>                
                     <% } else { %>
                         <%= fileList[i][keys[j]] %>
                     <% } %>
