@@ -34,7 +34,7 @@ route.get('/', async (ctx) => {
 route.get('/list', async (ctx) => {
   try {
     let filesArray = await(await db.FILE.find({})).map(_=>{ return utils.mapper(_)  }).reverse();
-    let keys = Object.keys(utils.mapper(Object)).filter(_=> _ != "file_id");
+    let keys = Object.keys(utils.mapper(Object)).filter(_=> _ != "file_id" && _!= "first_order_id");
     await ctx.render('list', {'fileList': filesArray, 'keys': keys, 'environment': environment, 'listPage': true});
   } catch (e) {
     ctx.body =  {'result':'fail', 'message': e.name};

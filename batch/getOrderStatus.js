@@ -73,22 +73,29 @@ async function batchGetOrderStatus() {
             if(info.statename) {
                 file.status = info.statename;
                 file.order_duration = info.duration;
+                file.order_id = String(info.orders);
                 await file.save(); 
             }
             if(info.statename=="Delivered") {
                 let transcript = await getTranscript(order_audiofile);
-                let dir = `transcript/${file.order_id}`;
+                let order_ids = file.order_id.split(",");
+                let first_order_id = order_ids.at(-1);
+                let dir = `transcript/${first_order_id}`;
                 if (!fs.existsSync(dir)) {
                     fs.mkdirSync(dir);
                 }
-                let transcriptPath = `${dir}/${file.order_id}_transcript.txt`;
+
+                let transcriptPath = `${dir}/${first_order_id}_transcript.txt`;
                 if(!fs.existsSync(transcriptPath)) {
                     fs.writeFileSync(transcriptPath, transcript);
                 }
-                let receiptPath = `${dir}/Order_${file.order_id}_Receipt_III.html`;
-                if(!fs.existsSync(receiptPath)) {
-                    await bot.start(order_id);
-                } 
+                for(let i=0;i<order_ids.length;i++) {
+                    let order_id = order_ids[i];
+                    let receiptPath = `${dir}/Order_${order_id}_Receipt_III.html`;
+                    if(!fs.existsSync(receiptPath)) {
+                        await bot.start(order_id, receiptPath);
+                    } 
+                }
                 if(!file.receipt_send) {
                     console.log('will send receipt to email.');
                     await sendEmail(order_id);

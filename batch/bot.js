@@ -18,7 +18,7 @@ function delay(time) {
   });
 }
 
-async function start(order_id) {
+async function start(order_id, path) {
   try{
     const browser = await puppeteer.launch(options);
     const page = await browser.newPage();
@@ -93,11 +93,7 @@ async function start(order_id) {
     <h2 style="margin-top:0; margin-bottom:0; ">To: Institue for Information Industry</h2>
     <h2 style="margin-top:0; margin-bottom:0; ">11F, NO. 106, Sec. 2, Heping E. Rd., <br>Taipei 106, Taiwan, R.O.C.</h2>`);
     
-    let dir = `transcript/${order_id}`;
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-    }
-    fs.writeFileSync(`${dir}/Order_${order_id}_Receipt_III.html`, html_contents);
+    fs.writeFileSync(path, html_contents);
 
     
     await browser.close();

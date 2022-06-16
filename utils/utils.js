@@ -21,6 +21,22 @@ function mapper(_) {
     if(order_date) {
       order_date = moment(_.order_date).locale('zh_TW').format('LLLL');
     }
+    let price = "";
+    if(_.order_duration!=undefined && _.speed_level!=undefined) {
+        speed_price = {
+            "TRANS14": 1,
+            "TRANS6": 1.5,
+            "TRANS2": 2.5,
+        }
+        price = _.order_duration * speed_price[_.speed_level];
+    }
+    let order_id = _.order_id;
+    let first_order_id = undefined;
+    if(order_id!=undefined) {
+        order_id = String(_.order_id).split(",");
+        first_order_id = order_id.at(-1); 
+    }
+    
     return {
         file_id: _.id,
         title: _.title,
@@ -30,10 +46,12 @@ function mapper(_) {
         file_size: file_size_str,
         file_upload_date: moment(_.file_upload_date).locale('zh_TW').format('LLLL'),
         order_date: order_date,
-        order_id:  _.order_id,
+        first_order_id: first_order_id,
+        order_id: order_id,
         audiofiles: _.order_audiofiles,
         duration: (_.order_duration)?_.order_duration+" min":"",
         speed_level: _.speed_level,
+        price: price,
         status: _.status,
     };
 }

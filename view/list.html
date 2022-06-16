@@ -10,7 +10,8 @@
                 <% var file_id = fileList[i]["file_id"]; %>
                 <% var file_url = fileList[i]["file_url"]; %>
                 <% var status = fileList[i]["status"]; %>
-                <% var orderId = fileList[i]["order_id"]; %>
+                <% var first_orderId = String(fileList[i]["order_id"]).split(",").at(-1); %>
+                <% var orderId = fileList[i]["order_id"].reverse(); %>
                 <tr id='<%= file_id %>'>
                 <% for(var j = 0; j < keys.length; j++) {%>
                     <td>
@@ -19,13 +20,16 @@
                             <%= fileList[i][keys[j]] %>
                         </a>
                     <% }else if(keys[j] == "status" && status == "Delivered") { %>
-                            <a target="_blank" href='<%= orderId %>/<%= orderId %>_transcript.txt'>
-                                Transcript
+                            <a target="_blank" href='<%= first_orderId %>/<%= first_orderId %>_transcript.txt'>
+                                Transcript_<%= first_orderId %>
                             </a>
-                            <br><br>
-                            <a target="_blank" href='<%= orderId %>/Order_<%= orderId %>_Receipt_III.html'>
-                                Receipt
-                            </a>
+                            <br>
+                            <% for(var k = 0; k < orderId.length; k++) {%>
+                                <% var l_orderId = orderId[k]; %>
+                                <a target="_blank" href='<%= first_orderId %>/Order_<%= l_orderId %>_Receipt_III.html'>
+                                    Receipt_<%= l_orderId %>
+                                </a>
+                            <% } %>
                     <% } else if(keys[j] == "status" && status == "uploaded") { %> 
                             <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalView" data-bs-type="Submit" data-bs-file_url="<%= file_url %>" data-bs-file_id="<%= file_id %>">Submit</button>
                             <br><br>
